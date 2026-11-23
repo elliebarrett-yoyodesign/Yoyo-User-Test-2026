@@ -1,0 +1,98 @@
+YOYO WEBSITE USER TEST – PLAIN TEXT INSTRUCTIONS
+
+This is a plain text copy of the instructions. Please give your answers in the online test page.
+If you have a problem with the test page, email ellie.barrett@yoyodesign.com.
+
+
+INTRODUCTION
+
+Thank you again for agreeing to take part in our unmoderated user test. We're hoping to learn about how we can make our website more accessible for our users, and would love your input.
+
+We are testing the Yoyo Design website, not you, so there are no wrong answers. If something is hard to use, that is what we need to know.
+
+Please use your usual device, browser and tools. This should take no more than 30 minutes, and you can take a break at any time or stop whenever you like. You do not need to tell us about any disability or health condition. If you get stuck on a task, say so in your answer and move on.
+
+You will be asked:
+- Your participant code (for example P1)
+- Whether you agree to take part, and for your answers to be used in this research
+- Which setup best describes yours: screen reader, keyboard or switch, magnification, voice or alternative input, reading or hearing support, or no assistive technology. If you use more than one, choose the one you use most. We understand this doesn't mean your needs are only related to this setup, and you can tell us about anything else in your answers.
+- Which device and browser you are using
+
+
+TASK 1: WHO IS YOYO? (about 7 minutes)
+
+Imagine you work for a small charity that needs a new website, and a colleague has recommended Yoyo. Go to https://yoyodesign.com/ and spend up to 3 minutes looking around, as you normally would. Then come back and answer these questions.
+
+- In your own words, what does Yoyo do?
+- Who does Yoyo work with?
+- Is there anything else you learned about Yoyo?
+- Do you think this company could help your charity? Why?
+- How easy was it to find this out? (Very easy, Easy, Neither, Difficult, Very difficult)
+- Did anything get in your way?
+
+
+TASK 2: CONTACT YOYO (about 8 minutes)
+
+You would like to ask Yoyo about a new website. Go to the Yoyo website, find the contact form and send an enquiry using these test details. Please do not enter your own details.
+
+- Name: USER TEST followed by your participant code, such as USER TEST P1
+- Email: test@yoyodesign.com
+- I need help with: Digital Services
+- I'd like more info about: USER TEST, please ignore
+- How did you hear about Yoyo?: User test
+- Marketing checkbox: leave unticked
+
+Then answer these questions.
+
+- Were you able to find the contact form? (Yes, Yes with difficulty, No)
+- Were you able to send the form? (Yes, Yes with difficulty, No, Not sure)
+- How do you know whether your message was sent?
+- Was it clear what each field needed, and which were required?
+- Did your browser or tools offer to fill in any fields?
+- If you pressed Tab through the form, could you always see where you were?
+- Did anything get in your way?
+
+
+TASK 3: WEBSITE CHECKS (about 8 minutes)
+
+Answer each check with Yes, Partly or No, plus any comments.
+
+Everyone does this check first:
+Go back to a blank contact form. Leave the email field empty and press Send. Did you get a clear message saying what was wrong? Now enter test@ as the email and press Send again. Did the message tell you how to fix it? You do not need to send the form again.
+
+Then do the 2 checks for your setup:
+
+Screen reader
+- Choose Services in the main menu. Were you told that the page had changed?
+- Find the theme control at the top of the page. Could you tell which theme is active?
+
+Keyboard or switch
+- Move into the footer at the bottom of the homepage. Could you see each link and the sign-up form as you reached it?
+- Start at the top of a page. Could you get to the main content without going through every menu link?
+
+Magnification
+- Zoom to 200%, then 400%. Could you read everything without scrolling sideways?
+- Try the Light, Coral and Dark themes. Was all the text and every control easy to see?
+
+Voice or alternative input
+- Use your usual commands to open a link and press Send on the contact form. Did the website respond?
+- Select each social media link in the homepage footer. Could you select each one without hitting the wrong link?
+
+Reading or hearing support
+- Play the video at the top of the homepage. If it has speech, were captions available? Could you follow it?
+- Could you stop the video once it had started?
+
+No assistive technology
+- Did anything moving on the homepage distract you? Could you stop it?
+- On a phone, tap each social media link in the footer. Could you tap each one without hitting the wrong link?
+
+
+FINAL QUESTIONS (about 4 minutes)
+
+- What was the easiest part of the website to use?
+- What was the hardest part?
+- Was anything confusing, tiring or stressful?
+- How confident would you feel contacting Yoyo through this website? (1 to 5)
+- Is there anything else you would like us to know?
+
+Thank you for taking part.

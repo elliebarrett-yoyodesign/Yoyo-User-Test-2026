@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introduction, step 1 of 5 – Yoyo website user test</title>
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="googlebot" content="noindex, nofollow, noarchive">
+<style>
+  :root {
+    --text: #111;
+    --muted: #3d3d3d;
+    --bg: #fff;
+    --panel: #f3f3f3;
+    --border: #555;
+    --link: #0b4fa8;
+    --focus: #0b4fa8;
+    --focus-ring: #ffbf47;
+    --error: #b00020;
+    --button: #111;
+    --button-text: #fff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --text: #f2f2f2;
+      --muted: #cfcfcf;
+      --bg: #121212;
+      --panel: #222;
+      --border: #aaa;
+      --link: #8cc4ff;
+      --focus: #8cc4ff;
+      --error: #ff8a8a;
+      --button: #f2f2f2;
+      --button-text: #111;
+    }
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { font-size: 112.5%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Helvetica, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+  }
+  main { max-width: 40rem; margin: 0 auto; padding: 1rem 16px 4rem; }
+  h1 { font-size: 1.6rem; line-height: 1.25; margin: 1rem 0 0.25rem; }
+  h2 { font-size: 1.4rem; line-height: 1.3; margin: 0.5rem 0 1rem; }
+  h3 { font-size: 1.15rem; margin: 2rem 0 0.5rem; }
+  p, ul, ol { margin: 0 0 1rem; }
+  li { margin-bottom: 0.25rem; }
+  a { color: var(--link); text-decoration: underline; text-underline-offset: 0.15em; }
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px var(--focus-ring);
+  }
+  h2:focus, #error-summary:focus, #step-thanks h2:focus { outline: none; box-shadow: none; }
+  .progress { color: var(--muted); margin: 0; font-weight: bold; }
+  .question { margin: 0 0 1.75rem; }
+  label, legend { display: block; font-weight: bold; margin-bottom: 0.25rem; }
+  fieldset { border: 0; padding: 0; margin: 0 0 1.75rem; min-width: 0; }
+  legend { padding: 0; }
+  .hint { display: block; color: var(--muted); font-weight: normal; margin: 0 0 0.5rem; }
+  input[type="text"], input[type="email"], textarea {
+    display: block;
+    width: 100%;
+    font: inherit;
+    color: var(--text);
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 0;
+    padding: 0.5rem;
+  }
+  input.short { max-width: 12rem; }
+  textarea { min-height: 7rem; resize: vertical; }
+  .choice { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.5rem; }
+  .choice input { width: 1.5rem; height: 1.5rem; margin: 0.1rem 0 0; flex: none; accent-color: var(--text); }
+  .choice label { font-weight: normal; margin: 0; padding: 0.1rem 0; }
+  .choice .hint { margin: 0; }
+  .error-message { display: block; color: var(--error); font-weight: bold; margin: 0 0 0.5rem; }
+  [aria-invalid="true"] { border-color: var(--error) !important; border-width: 3px !important; }
+  .error-summary {
+    border: 4px solid var(--error);
+    padding: 1rem;
+    margin: 0 0 2rem;
+  }
+  .error-summary h2 { margin-top: 0; font-size: 1.2rem; }
+  .error-summary ul { margin: 0; }
+  .box {
+    background: var(--panel);
+    border-left: 6px solid var(--border);
+    padding: 1rem;
+    margin: 0 0 1.5rem;
+  }
+  .box > :last-child { margin-bottom: 0; }
+  .details-list { padding-left: 1.25rem; }
+  .actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
+  button {
+    font: inherit;
+    font-weight: bold;
+    min-height: 48px;
+    min-width: 7rem;
+    padding: 0.6rem 1.4rem;
+    border: 2px solid var(--button);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  button.primary { background: var(--button); color: var(--button-text); }
+  button.secondary { background: var(--bg); color: var(--text); }
+  .status { min-height: 1.5rem; color: var(--muted); margin: 0.5rem 0 1rem; }
+  .status.problem { color: var(--error); font-weight: bold; }
+  .check { border-top: 2px solid var(--border); padding-top: 1rem; margin-top: 1.5rem; }
+  .big-link { font-size: 1.15rem; font-weight: bold; }
+  @media (forced-colors: active) {
+    :focus-visible { outline: 3px solid Highlight; box-shadow: none; }
+    button.primary { border-color: ButtonText; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { scroll-behavior: auto !important; }
+  }
+</style>
+</head>
+<body>
+<main id="main">
+  <h1>Yoyo website user test</h1>
+  <p class="progress" id="progress" aria-hidden="true">Step 1 of 5</p>
+  <p class="status" id="save-status" role="status" aria-live="polite"></p>
+
+  <div id="error-summary" class="error-summary" tabindex="-1" hidden>
+    <h2 id="error-summary-title">There is a problem</h2>
+    <ul id="error-list"></ul>
+  </div>
+
+  <form id="test-form" novalidate>
+
+    <!-- STEP 1: INTRODUCTION -->
+    <section class="step" id="step-1" data-title="Introduction" aria-labelledby="h-step-1">
+      <h2 id="h-step-1" tabindex="-1">Introduction</h2>
+      <p>Thank you again for agreeing to take part in our unmoderated user test. We're hoping to learn about how we can make our website more accessible for our users, and would love your input.</p>
+      <p>We are testing the Yoyo Design website, not you, so there are no wrong answers. If something is hard to use, that is what we need to know.</p>
+      <p>Please use your usual device, browser and tools. This should take no more than 30 minutes, and you can take a break at any time or stop whenever you like. Your answers are saved each time you press Next.</p>
+      <p>You do not need to tell us about any disability or health condition. If you get stuck on a task, say so in your answer and move on.</p>
+      <p>If you have a problem with this test page, email <a href="mailto:ellie.barrett@yoyodesign.com">ellie.barrett@yoyodesign.com</a>. You can also read the <a href="instructions.txt">instructions as plain text</a>.</p>
+
+      <div class="question">
+        <label for="code">Your participant code (required)</label>
+        <span class="hint" id="code-hint">We sent you this code. For example, P1.</span>
+        <span class="error-message" id="code-error" hidden></span>
+        <input type="text" id="code" name="Participant code" class="short" aria-describedby="code-hint" autocomplete="off" spellcheck="false" autocapitalize="characters">
+      </div>
+
+      <fieldset id="consent-group" aria-describedby="consent-error">
+        <legend>Do you agree to take part, and for your answers to be used in this research? (required)</legend>
+        <span class="error-message" id="consent-error" hidden></span>
+        <div class="choice"><input type="radio" id="consent-yes" name="Consent" value="Yes"><label for="consent-yes">Yes, I agree</label></div>
+        <div class="choice"><input type="radio" id="consent-no" name="Consent" value="No"><label for="consent-no">No, I do not agree</label></div>
+      </fieldset>
+
+      <fieldset id="setup-group" aria-describedby="setup-hint setup-error">
+        <legend>Which of these best describes your setup? (required)</legend>
+        <span class="hint" id="setup-hint">If you use more than one, choose the one you use most. We understand this doesn't mean your needs are only related to this setup, and you can tell us about anything else in your answers.</span>
+        <span class="error-message" id="setup-error" hidden></span>
+        <div class="choice"><input type="radio" id="setup-sr" name="Setup" value="Screen reader" aria-describedby="setup-sr-hint"><div><label for="setup-sr">Screen reader</label><span class="hint" id="setup-sr-hint">For example, NVDA, JAWS or VoiceOver</span></div></div>
+        <div class="choice"><input type="radio" id="setup-kb" name="Setup" value="Keyboard or switch" aria-describedby="setup-kb-hint"><div><label for="setup-kb">Keyboard or switch</label><span class="hint" id="setup-kb-hint">For example, keyboard only, or switch control</span></div></div>
+        <div class="choice"><input type="radio" id="setup-mag" name="Setup" value="Magnification" aria-describedby="setup-mag-hint"><div><label for="setup-mag">Magnification</label><span class="hint" id="setup-mag-hint">For example, a screen magnifier or browser zoom</span></div></div>
+        <div class="choice"><input type="radio" id="setup-voice" name="Setup" value="Voice or alternative input" aria-describedby="setup-voice-hint"><div><label for="setup-voice">Voice or alternative input</label><span class="hint" id="setup-voice-hint">For example, Voice Control or Dragon</span></div></div>
+        <div class="choice"><input type="radio" id="setup-read" name="Setup" value="Reading or hearing support" aria-describedby="setup-read-hint"><div><label for="setup-read">Reading or hearing support</label><span class="hint" id="setup-read-hint">For example, text to speech, reader mode, captions or hearing technology</span></div></div>
+        <div class="choice"><input type="radio" id="setup-none" name="Setup" value="No assistive technology" aria-describedby="setup-none-hint"><div><label for="setup-none">No assistive technology</label><span class="hint" id="setup-none-hint">A standard browser and settings</span></div></div>
+      </fieldset>
+
+      <div class="question">
+        <label for="device">Which device and browser are you using?</label>
+        <span class="hint" id="device-hint">For example, Windows laptop with Chrome, or iPhone with Safari.</span>
+        <input type="text" id="device" name="Device and browser" aria-describedby="device-hint">
+      </div>
+    </section>
+
+    <!-- STOPPED: NO CONSENT -->
+    <section class="step" id="step-stopped" data-title="Thank you" aria-labelledby="h-step-stopped" hidden>
+      <h2 id="h-step-stopped" tabindex="-1">Thank you for your time</h2>
+      <p>You chose not to take part, so we will not use any answers. You can now close this page.</p>
+      <p>If you chose this by mistake, <button type="button" class="secondary" id="consent-back">go back to the introduction</button></p>
+    </section>
+
+    <!-- STEP 2: TASK 1 -->
+    <section class="step" id="step-2" data-title="Task 1: Who is Yoyo?" aria-labelledby="h-step-2" hidden>
+      <h2 id="h-step-2" tabindex="-1">Task 1: Who is Yoyo?</h2>
+      <div class="box">
+        <p>Imagine you work for a small charity that needs a new website, and a colleague has recommended Yoyo.</p>
+        <p>Open the Yoyo website and spend up to 3 minutes looking around, as you normally would. Then come back to this tab and answer the questions.</p>
+        <p><a class="big-link" href="https://yoyodesign.com/" target="_blank" rel="noopener">Open the Yoyo website (opens in a new tab)</a></p>
+      </div>
+
+      <div class="question">
+        <label for="t1-what">In your own words, what does Yoyo do?</label>
+        <textarea id="t1-what" name="T1 What does Yoyo do"></textarea>
+      </div>
+      <div class="question">
+        <label for="t1-who">Who does Yoyo work with?</label>
+        <textarea id="t1-who" name="T1 Who does Yoyo work with"></textarea>
+      </div>
+      <div class="question">
+        <label for="t1-else">Is there anything else you learned about Yoyo?</label>
+        <textarea id="t1-else" name="T1 Anything else learned"></textarea>
+      </div>
+      <div class="question">
+        <label for="t1-help">Do you think this company could help your charity? Why?</label>
+        <textarea id="t1-help" name="T1 Could Yoyo help your charity"></textarea>
+      </div>
+      <fieldset>
+        <legend>How easy was it to find this out?</legend>
+        <div class="choice"><input type="radio" id="t1-ease-1" name="T1 How easy" value="Very easy"><label for="t1-ease-1">Very easy</label></div>
+        <div class="choice"><input type="radio" id="t1-ease-2" name="T1 How easy" value="Easy"><label for="t1-ease-2">Easy</label></div>
+        <div class="choice"><input type="radio" id="t1-ease-3" name="T1 How easy" value="Neither easy nor difficult"><label for="t1-ease-3">Neither easy nor difficult</label></div>
+        <div class="choice"><input type="radio" id="t1-ease-4" name="T1 How easy" value="Difficult"><label for="t1-ease-4">Difficult</label></div>
+        <div class="choice"><input type="radio" id="t1-ease-5" name="T1 How easy" value="Very difficult"><label for="t1-ease-5">Very difficult</label></div>
+      </fieldset>
+      <div class="question">
+        <label for="t1-barriers">Did anything get in your way?</label>
+        <textarea id="t1-barriers" name="T1 Anything get in the way"></textarea>
+      </div>
+    </section>
+
+    <!-- STEP 3: TASK 2 -->
+    <section class="step" id="step-3" data-title="Task 2: Contact Yoyo" aria-labelledby="h-step-3" hidden>
+      <h2 id="h-step-3" tabindex="-1">Task 2: Contact Yoyo</h2>
+      <div class="box">
+        <p>You would like to ask Yoyo about a new website. Go to the Yoyo website, find the contact form and send an enquiry using the test details below.</p>
+        <p><strong>Please do not enter your own details.</strong></p>
+        <p><a class="big-link" href="https://yoyodesign.com/" target="_blank" rel="noopener">Open the Yoyo website (opens in a new tab)</a></p>
+      </div>
+      <h3 id="test-details-heading">Test details to enter</h3>
+      <ul class="details-list" aria-labelledby="test-details-heading">
+        <li>Name: <strong><span class="test-name">USER TEST</span></strong></li>
+        <li>Email: <strong>test@yoyodesign.com</strong></li>
+        <li>I need help with: <strong>Digital Services</strong></li>
+        <li>I'd like more info about: <strong>USER TEST, please ignore</strong></li>
+        <li>How did you hear about Yoyo?: <strong>User test</strong></li>
+        <li>Marketing checkbox: <strong>leave unticked</strong></li>
+      </ul>
+      <p>Then come back to this tab and answer these questions.</p>
+
+      <fieldset>
+        <legend>Were you able to find the contact form?</legend>
+        <div class="choice"><input type="radio" id="t2-find-1" name="T2 Found contact form" value="Yes"><label for="t2-find-1">Yes</label></div>
+        <div class="choice"><input type="radio" id="t2-find-2" name="T2 Found contact form" value="Yes, with difficulty"><label for="t2-find-2">Yes, with difficulty</label></div>
+        <div class="choice"><input type="radio" id="t2-find-3" name="T2 Found contact form" value="No"><label for="t2-find-3">No</label></div>
+      </fieldset>
+      <fieldset>
+        <legend>Were you able to send the form?</legend>
+        <div class="choice"><input type="radio" id="t2-send-1" name="T2 Sent the form" value="Yes"><label for="t2-send-1">Yes</label></div>
+        <div class="choice"><input type="radio" id="t2-send-2" name="T2 Sent the form" value="Yes, with difficulty"><label for="t2-send-2">Yes, with difficulty</label></div>
+        <div class="choice"><input type="radio" id="t2-send-3" name="T2 Sent the form" value="No"><label for="t2-send-3">No</label></div>
+        <div class="choice"><input type="radio" id="t2-send-4" name="T2 Sent the form" value="Not sure"><label for="t2-send-4">Not sure</label></div>
+      </fieldset>
+      <div class="question">
+        <label for="t2-know">How do you know whether your message was sent?</label>
+        <textarea id="t2-know" name="T2 How do you know it was sent"></textarea>
+      </div>
+      <div class="question">
+        <label for="t2-clear">Was it clear what each field needed, and which were required?</label>
+        <textarea id="t2-clear" name="T2 Fields clear and required marked"></textarea>
+      </div>
+      <div class="question">
+        <label for="t2-autofill">Did your browser or tools offer to fill in any fields?</label>
+        <textarea id="t2-autofill" name="T2 Browser offered autofill"></textarea>
+      </div>
+      <div class="question">
+        <label for="t2-focus">If you pressed Tab through the form, could you always see where you were?</label>
+        <span class="hint" id="t2-focus-hint">If you did not use the Tab key, you can leave this blank.</span>
+        <textarea id="t2-focus" name="T2 Focus visible when tabbing" aria-describedby="t2-focus-hint"></textarea>
+      </div>
+      <div class="question">
+        <label for="t2-barriers">Did anything get in your way?</label>
+        <textarea id="t2-barriers" name="T2 Anything get in the way"></textarea>
+      </div>
+    </section>
+
+    <!-- STEP 4: TASK 3 -->
+    <section class="step" id="step-4" data-title="Task 3: Website checks" aria-labelledby="h-step-4" hidden>
+      <h2 id="h-step-4" tabindex="-1">Task 3: Website checks</h2>
+      <p>There are 3 short checks on this page. Answer each one with Yes, Partly or No, and add any comments.</p>
+      <p><a href="https://yoyodesign.com/" target="_blank" rel="noopener">Open the Yoyo website (opens in a new tab)</a></p>
+
+      <div class="check">
+        <h3>Check 1: Form errors</h3>
+        <ol>
+          <li>Go back to a blank contact form.</li>
+          <li>Leave the email field empty and press Send.</li>
+          <li>Then enter <strong>test@</strong> as the email and press Send again.</li>
+        </ol>
+        <p>You do not need to send the form again.</p>
+        <fieldset>
+          <legend>When you left the email empty, did you get a clear message saying what was wrong?</legend>
+          <div class="choice"><input type="radio" id="t3-err1-y" name="T3 Error check: clear message (3.3.1, 4.1.3)" value="Yes"><label for="t3-err1-y">Yes</label></div>
+          <div class="choice"><input type="radio" id="t3-err1-p" name="T3 Error check: clear message (3.3.1, 4.1.3)" value="Partly"><label for="t3-err1-p">Partly</label></div>
+          <div class="choice"><input type="radio" id="t3-err1-n" name="T3 Error check: clear message (3.3.1, 4.1.3)" value="No"><label for="t3-err1-n">No</label></div>
+        </fieldset>
+        <fieldset>
+          <legend>When you entered test@, did the message tell you how to fix it?</legend>
+          <div class="choice"><input type="radio" id="t3-err2-y" name="T3 Error check: how to fix (3.3.3)" value="Yes"><label for="t3-err2-y">Yes</label></div>
+          <div class="choice"><input type="radio" id="t3-err2-p" name="T3 Error check: how to fix (3.3.3)" value="Partly"><label for="t3-err2-p">Partly</label></div>
+          <div class="choice"><input type="radio" id="t3-err2-n" name="T3 Error check: how to fix (3.3.3)" value="No"><label for="t3-err2-n">No</label></div>
+        </fieldset>
+        <div class="question">
+          <label for="t3-err-comments">Comments about the form errors (optional)</label>
+          <textarea id="t3-err-comments" name="T3 Error check: comments"></textarea>
+        </div>
+      </div>
+
+      <!-- Setup-specific checks. Only the group matching the participant's setup is shown. -->
+      <div class="setup-checks" data-setup="Screen reader" hidden>
+        <div class="check">
+          <h3>Check 2: Changing page</h3>
+          <p>Choose Services in the main menu.</p>
+          <fieldset>
+            <legend>Were you told that the page had changed?</legend>
+            <div class="choice"><input type="radio" id="sr1-y" name="T3 SR: page change announced (2.4.3)" value="Yes"><label for="sr1-y">Yes</label></div>
+            <div class="choice"><input type="radio" id="sr1-p" name="T3 SR: page change announced (2.4.3)" value="Partly"><label for="sr1-p">Partly</label></div>
+            <div class="choice"><input type="radio" id="sr1-n" name="T3 SR: page change announced (2.4.3)" value="No"><label for="sr1-n">No</label></div>
+          </fieldset>
+          <div class="question"><label for="sr1-c">Comments (optional)</label><textarea id="sr1-c" name="T3 SR: page change comments"></textarea></div>
+        </div>
+        <div class="check">
+          <h3>Check 3: Theme control</h3>
+          <p>Find the theme control at the top of the page.</p>
+          <fieldset>
+            <legend>Could you tell which theme is active?</legend>
+            <div class="choice"><input type="radio" id="sr2-y" name="T3 SR: active theme clear (4.1.2)" value="Yes"><label for="sr2-y">Yes</label></div>
+            <div class="choice"><input type="radio" id="sr2-p" name="T3 SR: active theme clear (4.1.2)" value="Partly"><label for="sr2-p">Partly</label></div>
+            <div class="choice"><input type="radio" id="sr2-n" name="T3 SR: active theme clear (4.1.2)" value="No"><label for="sr2-n">No</label></div>
+          </fieldset>
+          <div class="question"><label for="sr2-c">Comments (optional)</label><textarea id="sr2-c" name="T3 SR: theme control comments"></textarea></div>
+        </div>
+      </div>
+
+      <div class="setup-checks" data-setup="Keyboard or switch" hidden>
+        <div class="check">
+          <h3>Check 2: Footer</h3>
+          <p>Move into the footer at the bottom of the homepage.</p>
+          <fieldset>
+            <legend>Could you see each link and the sign-up form as you reached it?</legend>
+            <div class="choice"><input type="radio" id="kb1-y" name="T3 KB: footer focus visible (2.4.7, 2.4.11)" value="Yes"><label for="kb1-y">Yes</label></div>
+            <div class="choice"><input type="radio" id="kb1-p" name="T3 KB: footer focus visible (2.4.7, 2.4.11)" value="Partly"><label for="kb1-p">Partly</label></div>
+            <div class="choice"><input type="radio" id="kb1-n" name="T3 KB: footer focus visible (2.4.7, 2.4.11)" value="No"><label for="kb1-n">No</label></div>
+          </fieldset>
+          <div class="question"><label for="kb1-c">Comments (optional)</label><textarea id="kb1-c" name="T3 KB: footer comments"></textarea></div>
+        </div>
+        <div class="check">
+          <h3>Check 3: Skipping the menu</h3>
+          <p>Start at the top of a page.</p>
+          <fieldset>
+            <legend>Could you get to the main content without going through every menu link?</legend>
+            <div class="choice"><input type="radio" id="kb2-y" name="T3 KB: skip to content (2.4.1)" value="Yes"><label for="kb2-y">Yes</label></div>
+            <div class="choice"><input type="radio" id="kb2-p" name="T3 KB: skip to content (2.4.1)" value="Partly"><label for="kb2-p">Partly</label></div>
+            <div class="choice"><input type="radio" id="kb2-n" name="T3 KB: skip to content (2.4.1)" value="No"><label for="kb2-n">No</label></div>
+          </fieldset>
+          <div class="question"><label for="kb2-c">Comments (optional)</label><textarea id="kb2-c" name="T3 KB: skip comments"></textarea></div>
+        </div>
+      </div>
+
+      <div class="setup-checks" data-setup="Magnification" hidden>
+        <div class="check">
+          <h3>Check 2: Zoom</h3>
+          <p>Zoom to 200%, then 400%.</p>
+          <fieldset>
+            <legend>Could you read everything without scrolling sideways?</legend>
+            <div class="choice"><input type="radio" id="mag1-y" name="T3 MAG: zoom and reflow (1.4.4, 1.4.10)" value="Yes"><label for="mag1-y">Yes</label></div>
+            <div class="choice"><input type="radio" id="mag1-p" name="T3 MAG: zoom and reflow (1.4.4, 1.4.10)" value="Partly"><label for="mag1-p">Partly</label></div>
+            <div class="choice"><input type="radio" id="mag1-n" name="T3 MAG: zoom and reflow (1.4.4, 1.4.10)" value="No"><label for="mag1-n">No</label></div>
+          </fieldset>
+          <div class="question"><label for="mag1-c">Comments (optional)</label><textarea id="mag1-c" name="T3 MAG: zoom comments"></textarea></div>
+        </div>
+        <div class="check">
+          <h3>Check 3: Themes</h3>
+          <p>Try the Light, Coral and Dark themes.</p>
+          <fieldset>
+            <legend>Was all the text and every control easy to see?</legend>
+            <div class="choice"><input type="radio" id="mag2-y" name="T3 MAG: theme contrast (1.4.3, 1.4.11)" value="Yes"><label for="mag2-y">Yes</label></div>
+            <div class="choice"><input type="radio" id="mag2-p" name="T3 MAG: theme contrast (1.4.3, 1.4.11)" value="Partly"><label for="mag2-p">Partly</label></div>
+            <div class="choice"><input type="radio" id="mag2-n" name="T3 MAG: theme contrast (1.4.3, 1.4.11)" value="No"><label for="mag2-n">No</label></div>
+          </fieldset>
+          <div class="question"><label for="mag2-c">Comments (optional)</label><textarea id="mag2-c" name="T3 MAG: theme comments"></textarea></div>
+        </div>
+      </div>
+
+      <div class="setup-checks" data-setup="Voice or alternative input" hidden>
+        <div class="check">
+          <h3>Check 2: Voice commands</h3>
+          <p>Use your usual commands to open a link, and to press Send on the contact form.</p>
+          <fieldset>
+            <legend>Did the website respond?</legend>
+            <div class="choice"><input type="radio" id="voice1-y" name="T3 VOICE: commands work (2.5.3)" value="Yes"><label for="voice1-y">Yes</label></div>
+            <div class="choice"><input type="radio" id="voice1-p" name="T3 VOICE: commands work (2.5.3)" value="Partly"><label for="voice1-p">Partly</label></div>
+            <div class="choice"><input type="radio" id="voice1-n" name="T3 VOICE: commands work (2.5.3)" value="No"><label for="voice1-n">No</label></div>
+          </fieldset>
+          <div class="question"><label for="voice1-c">Comments (optional)</label><textarea id="voice1-c" name="T3 VOICE: commands comments"></textarea></div>
+        </div>
+        <div class="check">
+          <h3>Check 3: Social media links</h3>
+          <p>Select each social media link in the homepage footer.</p>
+          <fieldset>
+            <legend>Could you select each one without hitting the wrong link?</legend>
+            <div class="choice"><input type="radio" id="voice2-y" name="T3 VOICE: social link targets (2.5.8)" value="Yes"><label for="voice2-y">Yes</label></div>
+            <div class="choice"><input type="radio" id="voice2-p" name="T3 VOICE: social link targets (2.5.8)" value="Partly"><label for="voice2-p">Partly</label></div>
+            <div class="choice"><input type="radio" id="voice2-n" name="T3 VOICE: social link targets (2.5.8)" value="No"><label for="voice2-n">No</label></div>
+          </fieldset>
+          <div class="question"><label for="voice2-c">Comments (optional)</label><textarea id="voice2-c" name="T3 VOICE: social links comments"></textarea></div>
+        </div>
+      </div>
+
+      <div class="setup-checks" data-setup="Reading or hearing support" hidden>
+        <div class="check">
+          <h3>Check 2: Video captions</h3>
+          <p>Play the video at the top of the homepage.</p>
+          <fieldset>
+            <legend>If it has speech, were captions available, and could you follow it?</legend>
+            <div class="choice"><input type="radio" id="read1-y" name="T3 READ: video captions (1.2.2, 1.2.5)" value="Yes"><label for="read1-y">Yes</label></div>
+            <div class="choice"><input type="radio" id="read1-p" name="T3 READ: video captions (1.2.2, 1.2.5)" value="Partly"><label for="read1-p">Partly</label></div>
+            <div class="choice"><input type="radio" id="read1-n" name="T3 READ: video captions (1.2.2, 1.2.5)" value="No"><label for="read1-n">No</label></div>
+          </fieldset>
+          <div class="question"><label for="read1-c">Comments (optional)</label><textarea id="read1-c" name="T3 READ: captions comments"></textarea></div>
+        </div>
+        <div class="check">
+          <h3>Check 3: Stopping the video</h3>
+          <fieldset>
+            <legend>Could you stop the video once it had started?</legend>
+            <div class="choice"><input type="radio" id="read2-y" name="T3 READ: stop video (2.1.1)" value="Yes"><label for="read2-y">Yes</label></div>
+            <div class="choice"><input type="radio" id="read2-p" name="T3 READ: stop video (2.1.1)" value="Partly"><label for="read2-p">Partly</label></div>
+            <div class="choice"><input type="radio" id="read2-n" name="T3 READ: stop video (2.1.1)" value="No"><label for="read2-n">No</label></div>
+          </fieldset>
+          <div class="question"><label for="read2-c">Comments (optional)</label><textarea id="read2-c" name="T3 READ: stop video comments"></textarea></div>
+        </div>
+      </div>
+
+      <div class="setup-checks" data-setup="No assistive technology" hidden>
+        <div class="check">
+          <h3>Check 2: Movement</h3>
+          <p>Look at the homepage.</p>
+          <fieldset>
+            <legend>Did anything moving on the homepage distract you, and could you stop it?</legend>
+            <span class="hint">Yes means nothing distracted you, or you could stop it.</span>
+            <div class="choice"><input type="radio" id="none1-y" name="T3 NONE: moving content (2.2.2)" value="Yes"><label for="none1-y">Yes</label></div>
+            <div class="choice"><input type="radio" id="none1-p" name="T3 NONE: moving content (2.2.2)" value="Partly"><label for="none1-p">Partly</label></div>
+            <div class="choice"><input type="radio" id="none1-n" name="T3 NONE: moving content (2.2.2)" value="No"><label for="none1-n">No</label></div>
+          </fieldset>
+          <div class="question"><label for="none1-c">Comments (optional)</label><textarea id="none1-c" name="T3 NONE: moving content comments"></textarea></div>
+        </div>
+        <div class="check">
+          <h3>Check 3: Social media links on a phone</h3>
+          <p>On a phone, tap each social media link in the homepage footer.</p>
+          <fieldset>
+            <legend>Could you tap each one without hitting the wrong link?</legend>
+            <div class="choice"><input type="radio" id="none2-y" name="T3 NONE: social link targets on phone (2.5.8)" value="Yes"><label for="none2-y">Yes</label></div>
+            <div class="choice"><input type="radio" id="none2-p" name="T3 NONE: social link targets on phone (2.5.8)" value="Partly"><label for="none2-p">Partly</label></div>
+            <div class="choice"><input type="radio" id="none2-n" name="T3 NONE: social link targets on phone (2.5.8)" value="No"><label for="none2-n">No</label></div>
+          </fieldset>
+          <div class="question"><label for="none2-c">Comments (optional)</label><textarea id="none2-c" name="T3 NONE: social links comments"></textarea></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 5: FINAL QUESTIONS -->
+    <section class="step" id="step-5" data-title="Final questions" aria-labelledby="h-step-5" hidden>
+      <h2 id="h-step-5" tabindex="-1">Final questions</h2>
+      <div class="question">
+        <label for="f-easiest">What was the easiest part of the website to use?</label>
+        <textarea id="f-easiest" name="Final: easiest part"></textarea>
+      </div>
+      <div class="question">
+        <label for="f-hardest">What was the hardest part?</label>
+        <textarea id="f-hardest" name="Final: hardest part"></textarea>
+      </div>
+      <div class="question">
+        <label for="f-stress">Was anything confusing, tiring or stressful?</label>
+        <textarea id="f-stress" name="Final: confusing, tiring or stressful"></textarea>
+      </div>
+      <fieldset>
+        <legend>How confident would you feel contacting Yoyo through this website?</legend>
+        <div class="choice"><input type="radio" id="f-conf-1" name="Final: confidence (1 to 5)" value="1"><label for="f-conf-1">1 – Not at all confident</label></div>
+        <div class="choice"><input type="radio" id="f-conf-2" name="Final: confidence (1 to 5)" value="2"><label for="f-conf-2">2</label></div>
+        <div class="choice"><input type="radio" id="f-conf-3" name="Final: confidence (1 to 5)" value="3"><label for="f-conf-3">3</label></div>
+        <div class="choice"><input type="radio" id="f-conf-4" name="Final: confidence (1 to 5)" value="4"><label for="f-conf-4">4</label></div>
+        <div class="choice"><input type="radio" id="f-conf-5" name="Final: confidence (1 to 5)" value="5"><label for="f-conf-5">5 – Very confident</label></div>
+      </fieldset>
+      <div class="question">
+        <label for="f-other">Is there anything else you would like us to know?</label>
+        <textarea id="f-other" name="Final: anything else"></textarea>
+      </div>
+    </section>
+
+    <!-- THANK YOU -->
+    <section class="step" id="step-thanks" data-title="Thank you" aria-labelledby="h-step-thanks" hidden>
+      <h2 id="h-step-thanks" tabindex="-1">Thank you</h2>
+      <p>Your answers have been saved, and you can now close this page.</p>
+    </section>
+
+    <div class="actions" id="actions">
+      <button type="submit" class="primary" id="next-button">Next</button>
+      <button type="button" class="secondary" id="back-button" hidden>Back</button>
+    </div>
+  </form>
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  // ---- SETTINGS -----------------------------------------------------------
+  // Paste the Google Apps Script web app URL here (it ends in /exec).
+  var SHEET_URL = 'https://script.google.com/macros/s/AKfycbxAXo46NE53ccb1yI84fjHQ9Nxjl66s9OXB3gTHcV6xliv-h7M7rUUiH7rUdRedvZb0BA/exec';
+  var SUPPORT_EMAIL = 'ellie.barrett@yoyodesign.com';
+  // -------------------------------------------------------------------------
+
+  var STORAGE_KEY = 'yoyo-user-test-2026';
+  var STEPS = ['step-1', 'step-2', 'step-3', 'step-4', 'step-5'];
+  var TOTAL = STEPS.length;
+
+  var form = document.getElementById('test-form');
+  var nextButton = document.getElementById('next-button');
+  var backButton = document.getElementById('back-button');
+  var actions = document.getElementById('actions');
+  var progress = document.getElementById('progress');
+  var status = document.getElementById('save-status');
+  var errorSummary = document.getElementById('error-summary');
+  var errorList = document.getElementById('error-list');
+
+  var state = { sessionId: makeId(), step: 0 };
+  var currentId = 'step-1';
+
+  // Every answer field, in page order, as the column order for the sheet.
+  function fieldNames() {
+    var names = [];
+    Array.prototype.forEach.call(form.elements, function (el) {
+      if (el.name && names.indexOf(el.name) === -1) names.push(el.name);
+    });
+    return names;
+  }
+
+  function collectAnswers() {
+    var answers = {};
+    fieldNames().forEach(function (name) {
+      var el = form.elements[name];
+      answers[name] = el ? (el.value || '') : '';
+    });
+    return answers;
+  }
+
+  function makeId() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return 'id-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+  }
+
+  // ---- Saving in this browser (so people can come back later) -------------
+  function saveLocal() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        sessionId: state.sessionId,
+        step: state.step,
+        answers: collectAnswers()
+      }));
+    } catch (e) { /* storage unavailable: carry on without it */ }
+  }
+
+  function restoreLocal() {
+    var saved;
+    try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch (e) { saved = null; }
+    if (!saved || !saved.answers) return false;
+    state.sessionId = saved.sessionId || state.sessionId;
+    Object.keys(saved.answers).forEach(function (name) {
+      var el = form.elements[name];
+      // Works for text fields and for radio groups (RadioNodeList)
+      if (el && saved.answers[name]) el.value = saved.answers[name];
+    });
+    return typeof saved.step === 'number' ? saved.step : 0;
+  }
+
+  function clearLocal() {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
+  }
+
+  // ---- Sending to Google Sheets -------------------------------------------
+  function sendToSheet(stepLabel) {
+    if (!SHEET_URL || SHEET_URL.indexOf('PASTE_') === 0) {
+      console.warn('SHEET_URL is not set, so answers were not sent.');
+      return Promise.resolve(false);
+    }
+    var payload = {
+      sessionId: state.sessionId,
+      step: stepLabel,
+      order: fieldNames(),
+      answers: collectAnswers()
+    };
+    return fetch(SHEET_URL, {
+      method: 'POST',
+      // text/plain avoids a CORS preflight, which Apps Script cannot answer
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+      redirect: 'follow'
+    }).then(function (res) {
+      return res.json();
+    }).then(function (data) {
+      return !!(data && data.ok);
+    }).catch(function () {
+      return false;
+    });
+  }
+
+  function setStatus(message, isProblem) {
+    status.textContent = message;
+    status.classList.toggle('problem', !!isProblem);
+  }
+
+  function saveInBackground(stepLabel) {
+    saveLocal();
+    setStatus('Saving your answers…');
+    sendToSheet(stepLabel).then(function (ok) {
+      if (ok) {
+        setStatus('Your answers so far have been saved.');
+      } else {
+        setStatus('We could not save your answers to our server just now. They are kept on this device, and we will try again when you press Next.', true);
+      }
+    });
+  }
+
+  // ---- Errors -------------------------------------------------------------
+  function clearErrors() {
+    errorSummary.hidden = true;
+    errorList.innerHTML = '';
+    form.querySelectorAll('.error-message').forEach(function (m) { m.hidden = true; m.textContent = ''; });
+    form.querySelectorAll('[aria-invalid]').forEach(function (el) { el.removeAttribute('aria-invalid'); });
+  }
+
+  function showErrors(errors) {
+    errors.forEach(function (err) {
+      var msg = document.getElementById(err.messageId);
+      msg.textContent = 'Error: ' + err.text;
+      msg.hidden = false;
+      var target = document.getElementById(err.fieldId);
+      if (target.type === 'text') {
+        target.setAttribute('aria-invalid', 'true');
+        var describedBy = (target.getAttribute('aria-describedby') || '').split(' ');
+        if (describedBy.indexOf(err.messageId) === -1) describedBy.push(err.messageId);
+        target.setAttribute('aria-describedby', describedBy.join(' ').trim());
+      }
+      var li = document.createElement('li');
+      var a = document.createElement('a');
+      a.href = '#' + err.fieldId;
+      a.textContent = err.text;
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        target.focus();
+      });
+      li.appendChild(a);
+      errorList.appendChild(li);
+    });
+    errorSummary.hidden = false;
+    errorSummary.focus();
+    document.title = 'Error: ' + document.title.replace(/^Error: /, '');
+  }
+
+  function validateStep1() {
+    var errors = [];
+    var code = form.elements['Participant code'];
+    code.value = code.value.trim().toUpperCase();
+    if (!code.value) {
+      errors.push({ fieldId: 'code', messageId: 'code-error', text: 'Enter your participant code, for example P1' });
+    }
+    if (!form.elements['Consent'].value) {
+      errors.push({ fieldId: 'consent-yes', messageId: 'consent-error', text: 'Choose whether you agree to take part' });
+    }
+    if (!form.elements['Setup'].value) {
+      errors.push({ fieldId: 'setup-sr', messageId: 'setup-error', text: 'Choose the setup that best describes yours' });
+    }
+    return errors;
+  }
+
+  // ---- Moving between steps -----------------------------------------------
+  function showSection(id, title, moveFocus) {
+    form.querySelectorAll('.step').forEach(function (s) { s.hidden = (s.id !== id); });
+    currentId = id;
+    var index = STEPS.indexOf(id);
+    if (index > -1) {
+      progress.hidden = false;
+      progress.textContent = 'Step ' + (index + 1) + ' of ' + TOTAL;
+      actions.hidden = false;
+      backButton.hidden = (index === 0);
+      nextButton.textContent = (index === TOTAL - 1) ? 'Send my answers' : 'Next';
+      document.title = title + ', step ' + (index + 1) + ' of ' + TOTAL + ' – Yoyo website user test';
+      var heading = document.getElementById('h-' + id);
+      heading.textContent = title;
+      heading.setAttribute('aria-describedby', 'progress');
+    } else {
+      progress.hidden = true;
+      actions.hidden = true;
+      document.title = title + ' – Yoyo website user test';
+    }
+    if (moveFocus) {
+      window.scrollTo(0, 0);
+      var h = document.getElementById('h-' + id);
+      if (h) h.focus();
+    }
+  }
+
+  function goToStep(index, moveFocus) {
+    state.step = index;
+    updateDynamicContent();
+    var section = document.getElementById(STEPS[index]);
+    showSection(STEPS[index], section.getAttribute('data-title'), moveFocus);
+  }
+
+  function updateDynamicContent() {
+    var code = (form.elements['Participant code'].value || '').trim().toUpperCase();
+    document.querySelectorAll('.test-name').forEach(function (el) {
+      el.textContent = 'USER TEST' + (code ? ' ' + code : ' followed by your participant code, for example USER TEST P1');
+    });
+    var setup = form.elements['Setup'].value;
+    document.querySelectorAll('.setup-checks').forEach(function (group) {
+      group.hidden = (group.getAttribute('data-setup') !== setup);
+    });
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    clearErrors();
+    var index = STEPS.indexOf(currentId);
+
+    if (index === 0) {
+      var errors = validateStep1();
+      if (errors.length) { showErrors(errors); return; }
+      if (form.elements['Consent'].value === 'No') {
+        clearLocal();
+        setStatus('');
+        showSection('step-stopped', 'Thank you for your time', true);
+        return;
+      }
+    }
+
+    var stepLabel = document.getElementById(currentId).getAttribute('data-title');
+
+    if (index < TOTAL - 1) {
+      state.step = index + 1;
+      saveInBackground('Completed: ' + stepLabel);
+      goToStep(index + 1, true);
+      return;
+    }
+
+    // Final step: wait for the save before saying thank you.
+    nextButton.disabled = true;
+    saveLocal();
+    setStatus('Sending your answers…');
+    sendToSheet('Finished').then(function (ok) {
+      nextButton.disabled = false;
+      if (ok) {
+        clearLocal();
+        setStatus('');
+        showSection('step-thanks', 'Thank you', true);
+      } else {
+        setStatus('');
+        errorList.innerHTML = '';
+        var li = document.createElement('li');
+        li.innerHTML = 'We could not send your answers. Your answers are still here. Please check your internet connection and press Send my answers again. If it keeps happening, email <a href="mailto:' + SUPPORT_EMAIL + '">' + SUPPORT_EMAIL + '</a>.';
+        errorList.appendChild(li);
+        errorSummary.hidden = false;
+        errorSummary.focus();
+      }
+    });
+  });
+
+  backButton.addEventListener('click', function () {
+    clearErrors();
+    var index = STEPS.indexOf(currentId);
+    if (index > 0) {
+      saveLocal();
+      goToStep(index - 1, true);
+    }
+  });
+
+  document.getElementById('consent-back').addEventListener('click', function () {
+    goToStep(0, true);
+  });
+
+  // Keep the browser copy up to date as people type, so nothing is lost.
+  var typingTimer;
+  form.addEventListener('input', function () {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(saveLocal, 500);
+  });
+  form.addEventListener('change', saveLocal);
+
+  // ---- Start ---------------------------------------------------------------
+  var restoredStep = restoreLocal();
+  if (restoredStep !== false && restoredStep > 0) {
+    goToStep(Math.min(restoredStep, TOTAL - 1), false);
+    setStatus('Welcome back. We have kept the answers you gave before.');
+  } else {
+    goToStep(0, false);
+  }
+})();
+</script>
+</body>
+</html>
