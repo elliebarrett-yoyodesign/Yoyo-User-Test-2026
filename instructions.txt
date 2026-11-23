@@ -35,7 +35,7 @@ TASK 2: CONTACT YOYO (about 8 minutes)
 
 You would like to ask Yoyo about a new website. Go to the Yoyo website, find the contact form and send an enquiry using these test details. Please do not enter your own details.
 
-- Name: USER TEST followed by your participant code, such as USER TEST P1
+- Name: your participant code, such as P1
 - Email: test@yoyodesign.com
 - I need help with: Digital Services
 - I'd like more info about: USER TEST, please ignore
@@ -58,7 +58,7 @@ TASK 3: WEBSITE CHECKS (about 8 minutes)
 Answer each check with Yes, Partly or No, plus any comments.
 
 Everyone does this check first:
-Go back to a blank contact form. Leave the email field empty and press Send. Did you get a clear message saying what was wrong? Now enter test@ as the email and press Send again. Did the message tell you how to fix it? You do not need to send the form again.
+Go back to a blank contact form. Leave the email field empty and press Send. Did you get a clear message saying what was wrong?
 
 Then do the 2 checks for your setup:
 
@@ -79,7 +79,7 @@ Voice or alternative input
 - Select each social media link in the homepage footer. Could you select each one without hitting the wrong link?
 
 Reading or hearing support
-- Play the video at the top of the homepage. If it has speech, were captions available? Could you follow it?
+- Play the video at the top of the homepage. Do you feel that this video requires captions? (Yes, No or Not sure, and why)
 - Could you stop the video once it had started?
 
 No assistive technology

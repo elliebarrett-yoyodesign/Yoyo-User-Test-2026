@@ -233,7 +233,7 @@
       </div>
       <h3 id="test-details-heading">Test details to enter</h3>
       <ul class="details-list" aria-labelledby="test-details-heading">
-        <li>Name: <strong><span class="test-name">USER TEST</span></strong></li>
+        <li>Name: <strong><span class="test-name">your participant code</span></strong></li>
         <li>Email: <strong>test@yoyodesign.com</strong></li>
         <li>I need help with: <strong>Digital Services</strong></li>
         <li>I'd like more info about: <strong>USER TEST, please ignore</strong></li>
@@ -289,20 +289,12 @@
         <ol>
           <li>Go back to a blank contact form.</li>
           <li>Leave the email field empty and press Send.</li>
-          <li>Then enter <strong>test@</strong> as the email and press Send again.</li>
         </ol>
-        <p>You do not need to send the form again.</p>
         <fieldset>
           <legend>When you left the email empty, did you get a clear message saying what was wrong?</legend>
           <div class="choice"><input type="radio" id="t3-err1-y" name="T3 Error check: clear message (3.3.1, 4.1.3)" value="Yes"><label for="t3-err1-y">Yes</label></div>
           <div class="choice"><input type="radio" id="t3-err1-p" name="T3 Error check: clear message (3.3.1, 4.1.3)" value="Partly"><label for="t3-err1-p">Partly</label></div>
           <div class="choice"><input type="radio" id="t3-err1-n" name="T3 Error check: clear message (3.3.1, 4.1.3)" value="No"><label for="t3-err1-n">No</label></div>
-        </fieldset>
-        <fieldset>
-          <legend>When you entered test@, did the message tell you how to fix it?</legend>
-          <div class="choice"><input type="radio" id="t3-err2-y" name="T3 Error check: how to fix (3.3.3)" value="Yes"><label for="t3-err2-y">Yes</label></div>
-          <div class="choice"><input type="radio" id="t3-err2-p" name="T3 Error check: how to fix (3.3.3)" value="Partly"><label for="t3-err2-p">Partly</label></div>
-          <div class="choice"><input type="radio" id="t3-err2-n" name="T3 Error check: how to fix (3.3.3)" value="No"><label for="t3-err2-n">No</label></div>
         </fieldset>
         <div class="question">
           <label for="t3-err-comments">Comments about the form errors (optional)</label>
@@ -416,12 +408,12 @@
           <h3>Check 2: Video captions</h3>
           <p>Play the video at the top of the homepage.</p>
           <fieldset>
-            <legend>If it has speech, were captions available, and could you follow it?</legend>
-            <div class="choice"><input type="radio" id="read1-y" name="T3 READ: video captions (1.2.2, 1.2.5)" value="Yes"><label for="read1-y">Yes</label></div>
-            <div class="choice"><input type="radio" id="read1-p" name="T3 READ: video captions (1.2.2, 1.2.5)" value="Partly"><label for="read1-p">Partly</label></div>
-            <div class="choice"><input type="radio" id="read1-n" name="T3 READ: video captions (1.2.2, 1.2.5)" value="No"><label for="read1-n">No</label></div>
+            <legend>Do you feel that this video requires captions?</legend>
+            <div class="choice"><input type="radio" id="read1-y" name="T3 READ: video requires captions (1.2.2, 1.2.5)" value="Yes"><label for="read1-y">Yes</label></div>
+            <div class="choice"><input type="radio" id="read1-n" name="T3 READ: video requires captions (1.2.2, 1.2.5)" value="No"><label for="read1-n">No</label></div>
+            <div class="choice"><input type="radio" id="read1-s" name="T3 READ: video requires captions (1.2.2, 1.2.5)" value="Not sure"><label for="read1-s">Not sure</label></div>
           </fieldset>
-          <div class="question"><label for="read1-c">Comments (optional)</label><textarea id="read1-c" name="T3 READ: captions comments"></textarea></div>
+          <div class="question"><label for="read1-c">Why? (optional)</label><textarea id="read1-c" name="T3 READ: captions comments"></textarea></div>
         </div>
         <div class="check">
           <h3>Check 3: Stopping the video</h3>
@@ -510,7 +502,7 @@
 
   // ---- SETTINGS -----------------------------------------------------------
   // Paste the Google Apps Script web app URL here (it ends in /exec).
-  var SHEET_URL = 'https://script.google.com/macros/s/AKfycbxAXo46NE53ccb1yI84fjHQ9Nxjl66s9OXB3gTHcV6xliv-h7M7rUUiH7rUdRedvZb0BA/exec';
+  var SHEET_URL = 'https://script.google.com/macros/s/AKfycbyepD9qbXJeBVgLvYXpj_m-wc13C7RVcnv21ic9YKX2XfneGqln6a2S1P8T4hUWSclY1g/exec';
   var SUPPORT_EMAIL = 'ellie.barrett@yoyodesign.com';
   // -------------------------------------------------------------------------
 
@@ -714,7 +706,7 @@
   function updateDynamicContent() {
     var code = (form.elements['Participant code'].value || '').trim().toUpperCase();
     document.querySelectorAll('.test-name').forEach(function (el) {
-      el.textContent = 'USER TEST' + (code ? ' ' + code : ' followed by your participant code, for example USER TEST P1');
+      el.textContent = code || 'your participant code, for example P1';
     });
     var setup = form.elements['Setup'].value;
     document.querySelectorAll('.setup-checks').forEach(function (group) {
